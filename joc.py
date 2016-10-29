@@ -85,10 +85,23 @@ def joaca_utilizatorul():
             print(e)
 
 
-def strategie_defensiva(linie: int, coloana: int):
-    if (coloana - 1 >= 0 and linie - 1 >= 0 and matrice_configuratie_curenta[linie - 1][coloana - 1] != 'A') and \
-            (coloana + 1 <= 7 and linie - 1 >= 0 and matrice_configuratie_curenta[linie - 1][coloana + 1]):
-        return True
+def incearca_k_pasi_inainte(ln_act: int, col_act: int, lista_adiacenta: list, strategie, nr_pasi: int):
+    ln_urm = ln_act - nr_pasi
+    col_urm = col_act
+    if este_pe_tabla(ln_urm, col_urm) \
+            and mutare_valida_inainte(matrice_configuratie_curenta, ln_act, ln_urm, col_urm, -1) \
+            and strategie(ln_urm, col_urm):
+        lista_adiacenta.append((ln_urm, col_urm))
+
+
+def incearca_deplasare_in_diag(ln_act: int, col_act: int, lista_adiacenta: list, strategie, deplasare):
+    ln_urm = ln_act - 1
+    col_urm = col_act + deplasare
+    if este_pe_tabla(ln_urm, col_urm) \
+            and mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act, ln_urm,
+                                      col_urm, -1) \
+            and strategie(ln_urm, col_urm):
+        lista_adiacenta.append((ln_urm, col_urm))
 
 
 def joaca_calculatorul(strategie):
@@ -99,40 +112,15 @@ def joaca_calculatorul(strategie):
     for piesa in configuratie_curenta['negre'].items():
         linie, coloana = piesa[1]['linie'], ord(piesa[1]['coloana']) - 65
         lista_adiacenta = list()
-        # Un pas in fata
-        ln_urm = linie - 1
-        col_urm = coloana
-        if este_pe_tabla(ln_urm, col_urm) and \
-                mutare_valida_inainte(matrice_configuratie_curenta, linie, ln_urm, col_urm, -1):
-            if strategie(ln_urm, col_urm):
-                lista_adiacenta.append((ln_urm, col_urm))
 
-        # Doi pasi in fara
-        ln_urm = linie - 2
-        col_urm = coloana
-        if piesa[1]['pas2'] == True and este_pe_tabla(ln_urm, col_urm) and \
-                mutare_valida_inainte(matrice_configuratie_curenta, linie, ln_urm, col_urm, -1):
-            if strategie(linie, coloana):
-                lista_adiacenta.append((ln_urmm, coloana))
+        incearca_k_pasi_inainte(linie, coloana, lista_adiacenta, strategie, 1)
+        if piesa[1]['pas2']:
+            incearca_k_pasi_inainte(linie, coloana, lista_adiacenta, strategie, 2)
 
-        # Diagonala
-        ln_urn = linie - 1
-        col_urm = coloana - 1
-        if este_pe_tabla(ln_urn, col_urm):
-            if mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, linie, ln_urn,
-                                     col_urm, -1):
-                if strategie(linie, coloana):
-                    lista_adiacenta.append((ln_urm, col_urm))
+        incearca_deplasare_in_diag(linie, coloana, lista_adiacenta, strategie, -1)
+        incearca_deplasare_in_diag(linie, coloana, lista_adiacenta, strategie, +1)
 
-        ln_urm = linie - 1
-        col_urm = coloana + 1
-        if este_pe_tabla(ln_urm, col_urm):
-            if mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, linie, ln_urm,
-                                     col_urm, -1):
-                if strategie(linie, coloana):
-                    lista_adiacenta.append((ln_urm, col_urm))
-
-        if len(lista_adiacenta) != 0:
+        if len(lista_adiacenta) is not 0:
             dictionar_lista_adiacenta[piesa[0]] = lista_adiacenta
 
     # Am determinat toate miscarile posibile, in functie de o strategie trebuie sa aleg o miscare
@@ -145,6 +133,16 @@ def joaca_calculatorul(strategie):
                               str(configuratie_curenta['negre'][pion_ales_pentru_mutare]['linie'])
     pozitie_noua = random.choice(list(dictionar_lista_adiacenta[pion_ales_pentru_mutare]))
     realizare_tranzitie(pozitie_veche_pion_ales, chr(pozitie_noua[1] + 65) + str(pozitie_noua[0]), 'N', 'negre')
+
+
+def strategie_ofensiva(ln_urm: int, col_urm: int):
+    return matrice_configuratie_curenta[ln_urm][col_urm] == 'A'
+
+
+def strategie_defensiva(linie: int, coloana: int):
+    if (coloana - 1 >= 0 and linie - 1 >= 0 and matrice_configuratie_curenta[linie - 1][coloana - 1] != 'A') and \
+            (coloana + 1 <= 7 and linie - 1 >= 0 and matrice_configuratie_curenta[linie - 1][coloana + 1]):
+        return True
 
 
 def este_remiza(dictionar_lista_adiacenta: dict):
@@ -174,7 +172,7 @@ def joaca(configuratie: dict, matrice: list):
             joaca_utilizatorul()
             rand_jucator = False
         else:
-            joaca_calculatorul( )
+            joaca_calculatorul()
             rand_jucator = True
         print()
         print()
