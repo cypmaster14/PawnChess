@@ -1,5 +1,5 @@
 import json
-from PawnChess.stari import *
+from stari import *
 
 nume_fisier = 'configuratie.json'
 configuratie = dict()
