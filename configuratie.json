@@ -1,0 +1,86 @@
+{
+  "negre": {
+    "1": {
+      "coloana": "A",
+      "linie": 7,
+      "pas2": true
+    },
+    "2": {
+      "coloana": "B",
+      "linie": 7,
+      "pas2": true
+    },
+    "3": {
+      "coloana": "C",
+      "linie": 7,
+      "pas2": true
+    },
+    "4": {
+      "coloana": "D",
+      "linie": 7,
+      "pas2": true
+    },
+    "5": {
+      "coloana": "E",
+      "linie": 7,
+      "pas2": true
+    },
+    "6": {
+      "coloana": "F",
+      "linie": 7,
+      "pas2": true
+    },
+    "7": {
+      "coloana": "G",
+      "linie": 7,
+      "pas2": true
+    },
+    "8": {
+      "coloana": "H",
+      "linie": 7,
+      "pas2": true
+    }
+  },
+  "albe": {
+    "1": {
+      "coloana": "A",
+      "linie": 2,
+      "pas2": true
+    },
+    "2": {
+      "coloana": "B",
+      "linie": 2,
+      "pas2": true
+    },
+    "3": {
+      "coloana": "C",
+      "linie": 2,
+      "pas2": true
+    },
+    "4": {
+      "coloana": "D",
+      "linie": 2,
+      "pas2": true
+    },
+    "5": {
+      "coloana": "E",
+      "linie": 2,
+      "pas2": true
+    },
+    "6": {
+      "coloana": "F",
+      "linie": 2,
+      "pas2": true
+    },
+    "7": {
+      "coloana": "G",
+      "linie": 2,
+      "pas2": true
+    },
+    "8": {
+      "coloana": "H",
+      "linie": 2,
+      "pas2": true
+    }
+  }
+}
