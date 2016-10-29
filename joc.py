@@ -36,9 +36,14 @@ def get_piesa_din_dictionar(piesa: str, culoare_jucator: str) -> int:
 
 
 def miscare_valida(pion: str, miscare: str):
-    global matrice_configuratie_anterioara, matrice_configuratie_curenta
+    global matrice_configuratie_anterioara, matrice_configuratie_curenta, configuratie_curenta
     ln_urm, col_urm = get_pozitie(miscare)
     ln_act, col_act = get_pozitie(pion)
+    pozitie = get_piesa_din_dictionar(pion, 'albe')
+
+    if abs(ln_urm - ln_act) == 2 and col_act == col_urm and configuratie_curenta['albe'][pozitie]['pas2'] == False:
+        return False
+
     return mutare_valida_jucator(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act, col_act, ln_urm,
                                  col_urm, 1)
 
@@ -51,8 +56,10 @@ def realizare_tranzitie(piesa_mutata: str, noua_pozitie: str, jucator: str, culo
     matrice_configuratie_curenta[linie_veche][coloana_veche] = '0'
     matrice_configuratie_curenta[linie_noua][coloana_noua] = jucator
     pion = get_piesa_din_dictionar(piesa_mutata, culoare_jucator)
+    if abs(linie_noua - linie_veche) == 2:
+        configuratie_curenta[culoare_jucator][pion]['pas2'] = False
     configuratie_curenta[culoare_jucator][pion]['linie'], configuratie_curenta[culoare_jucator][pion][
-        'coloana'] = linie_noua, coloana_noua
+        'coloana'] = linie_noua, chr(coloana_noua + 65)
 
 
 def joaca_utilizatorul():
@@ -130,6 +137,12 @@ def este_remiza(dictionar_lista_adiacenta: dict):
     return True
 
 
+def afiseaza_tabla_joc():
+    global matrice_configuratie_curenta
+    for i in range(7, -1, -1):
+        print(matrice_configuratie_curenta[i])
+
+
 def joaca(configuratie: dict, matrice: list):
     global configuratie_curenta, matrice_configuratie_anterioara, matrice_configuratie_curenta
     configuratie_curenta = configuratie
@@ -138,8 +151,12 @@ def joaca(configuratie: dict, matrice: list):
     # rand_jucator = random.choice([False, True])
     rand_jucator = True
     while not stare_finala(matrice_configuratie_curenta):
+        afiseaza_tabla_joc()
         if rand_jucator:
             joaca_utilizatorul()
             rand_jucator = False
         else:
             joaca_calculatorul()
+            rand_jucator = True
+        print()
+        print()
