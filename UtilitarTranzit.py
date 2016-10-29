@@ -7,28 +7,31 @@ def este_pe_tabla(linie: int, coloana: int):
     return False
 
 
-def mutare_valida_inainte(tabla: list, ln_init: int, ln_fin: int, col: int):
-    if fabs(ln_init - ln_fin) > 2 or fabs(ln_init - ln_fin) < 1:
-        return False
-    for ln in range(ln_init, ln_fin + 1):
-        if tabla[ln][col] is not 0:
-            return False
-    return True
-
-
-def mutare_valida_in_diag(tabla: list, ln_init: int, col_init: int, ln_fin: int, col_fin: int):
-    if not este_pe_tabla(ln_fin, col_fin):
-        return False
-    if fabs(ln_init - ln_fin) is not 1 or fabs(col_init - col_fin) is not 1:
-        return False
-    if tabla[ln_fin][ln_init] is 0:
+def mutare_valida_inainte(tabla: list, ln_act: int, ln_urm: int, col: int, sens: int):
+    if tabla[ln_urm][col] != 0 or tabla[ln_act + sens][col] != 0:
         return False
     return True
 
 
-def mutare_in_fata_cu_2_poz(table: list, ln_init: int, ln_fin: int, coloana: int, semn: int):
-    # Verific daca merg cum trebuie, unde ajung este liber si nu sar peste o piesa
-    if (ln_fin - ln_init) * semn < 0 or table[ln_fin][coloana] != 0 or table[ln_init + semn][coloana] != 0:
+def mutare_valida_normala_in_diag(tabla: list, ln_urm: int, col_urm: int):
+    if tabla[ln_urm][col_urm] != 0:
         return False
-
     return True
+
+
+def mutare_en_passant_valida(tabla_prec: list, tabla_act: list, ln_act: int, col_urm: int, sens: int):
+    ln_prec_piesa_adv = ln_act + 2 * sens
+    col_prec_piesa_adv = col_urm
+    ln_act_piesa_adv = ln_act
+    col_act_piesa_adv = col_urm
+    if tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] != 0 \
+            and tabla_prec[ln_act_piesa_adv][col_act_piesa_adv] == 0 \
+            and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == 0 \
+            and tabla_act[ln_act_piesa_adv][col_act_piesa_adv] != 0:
+        return True
+    return False
+
+
+def mutare_valida_in_diag(tabla_prec: list, tabla_act: list, ln_act: int, ln_urm: int, col_urm: int, sens: int):
+    return mutare_valida_normala_in_diag(tabla_act, ln_urm, col_urm) \
+           or mutare_en_passant_valida(tabla_prec, tabla_act, ln_act, col_urm, sens)
