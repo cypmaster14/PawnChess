@@ -53,5 +53,3 @@ def incarca_stare(nume_fisier: str) -> dict:
     with open(nume_fisier, 'r') as fp:
         data = json.load(fp)
     return data
-
-# De acum in jos intr un alt modul

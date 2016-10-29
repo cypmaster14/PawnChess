@@ -8,9 +8,7 @@ matrice_configuratie_anterioara = list()
 
 
 def validare_sintaxa_miscare(miscare: str):
-    if miscare[0].isalpha() and miscare[0] >= 'A' and miscare[0] <= 'H' and miscare[1].isdigit() and int(
-            miscare[1]) >= 0 and \
-                    int(miscare[1]) <= 8:
+    if miscare[0].isalpha() and 'A' <= miscare[0] <= 'H' and miscare[1].isdigit() and 0 <= int(miscare[1]) <= 8:
         return True
 
     return False
@@ -87,7 +85,13 @@ def joaca_utilizatorul():
             print(e)
 
 
-def joaca_calculatorul():
+def strategie_defensiva(linie: int, coloana: int):
+    if (coloana - 1 >= 0 and linie - 1 >= 0 and matrice_configuratie_curenta[linie - 1][coloana - 1] != 'A') and \
+            (coloana + 1 <= 7 and linie - 1 >= 0 and matrice_configuratie_curenta[linie - 1][coloana + 1]):
+        return True
+
+
+def joaca_calculatorul(strategie):
     # Calculatorul va juca mereu cu piesele negre
 
     dictionar_lista_adiacenta = dict()
@@ -96,26 +100,40 @@ def joaca_calculatorul():
         linie, coloana = piesa[1]['linie'], ord(piesa[1]['coloana']) - 65
         lista_adiacenta = list()
         # Un pas in fata
-        if mutare_valida_inainte(matrice_configuratie_curenta, linie, linie - 1, coloana, -1):
-            lista_adiacenta.append((linie - 1, coloana))
+        ln_urm = linie - 1
+        col_urm = coloana
+        if este_pe_tabla(ln_urm, col_urm) and \
+                mutare_valida_inainte(matrice_configuratie_curenta, linie, ln_urm, col_urm, -1):
+            if strategie(ln_urm, col_urm):
+                lista_adiacenta.append((ln_urm, col_urm))
 
         # Doi pasi in fara
-        if piesa[1]['pas2'] == True and mutare_valida_inainte(matrice_configuratie_curenta, linie, linie - 2, coloana,
-                                                              -1):
-            lista_adiacenta.append((linie - 2, coloana))
+        ln_urm = linie - 2
+        col_urm = coloana
+        if piesa[1]['pas2'] == True and este_pe_tabla(ln_urm, col_urm) and \
+                mutare_valida_inainte(matrice_configuratie_curenta, linie, ln_urm, col_urm, -1):
+            if strategie(linie, coloana):
+                lista_adiacenta.append((ln_urmm, coloana))
 
         # Diagonala
-        if coloana - 1 >= 0:
-            if mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, linie, linie - 1,
-                                     coloana - 1, -1):
-                lista_adiacenta.append((linie - 1, coloana - 1))
+        ln_urn = linie - 1
+        col_urm = coloana - 1
+        if este_pe_tabla(ln_urn, col_urm):
+            if mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, linie, ln_urn,
+                                     col_urm, -1):
+                if strategie(linie, coloana):
+                    lista_adiacenta.append((ln_urm, col_urm))
 
-        if coloana + 1 <= 7:
-            if mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, linie, linie - 1,
-                                     coloana + 1, -1):
-                lista_adiacenta.append((linie - 1, coloana + 1))
+        ln_urm = linie - 1
+        col_urm = coloana + 1
+        if este_pe_tabla(ln_urm, col_urm):
+            if mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, linie, ln_urm,
+                                     col_urm, -1):
+                if strategie(linie, coloana):
+                    lista_adiacenta.append((ln_urm, col_urm))
 
-        dictionar_lista_adiacenta[piesa[0]] = lista_adiacenta
+        if len(lista_adiacenta) != 0:
+            dictionar_lista_adiacenta[piesa[0]] = lista_adiacenta
 
     # Am determinat toate miscarile posibile, in functie de o strategie trebuie sa aleg o miscare
 
@@ -156,7 +174,7 @@ def joaca(configuratie: dict, matrice: list):
             joaca_utilizatorul()
             rand_jucator = False
         else:
-            joaca_calculatorul()
+            joaca_calculatorul( )
             rand_jucator = True
         print()
         print()
