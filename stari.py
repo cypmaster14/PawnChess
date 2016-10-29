@@ -1,4 +1,5 @@
 import json
+import random
 
 
 def stare_initiala():
@@ -7,22 +8,24 @@ def stare_initiala():
     coloana = 65
     for i in range(1, 9):
         albe[i] = {
-            'linie': 2,
+            'linie': 1,
             'coloana': chr(coloana + i - 1),
-            'pas2': True
+            'pas2': True,
+            'sens': 1
         }
 
         negre[i] = {
             'linie': 7,
             'coloana': chr(coloana + i - 1),
-            'pas2': True
+            'pas2': True,
+            'sens': -1
         }
 
     return (albe, negre, creeaza_matrice(albe, negre))
 
 
 def creeaza_matrice(albe: dict, negre: dict):
-    matrice = [[0] * 8 for i in range(8)]
+    matrice = [['0'] * 8 for i in range(8)]
     for cheia in albe.keys():
         linie = albe[cheia]['linie'] - 1
         coloana = ord(albe[cheia]['coloana']) - 65
@@ -51,3 +54,5 @@ def incarca_stare(nume_fisier: str) -> dict:
     with open(nume_fisier, 'r') as fp:
         data = json.load(fp)
     return data
+
+# De acum in jos intr un alt modul
