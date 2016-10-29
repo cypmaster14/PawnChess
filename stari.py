@@ -15,7 +15,7 @@ def stare_initiala():
         }
 
         negre[i] = {
-            'linie': 7,
+            'linie': 6,
             'coloana': chr(coloana + i - 1),
             'pas2': True,
             'sens': -1
@@ -27,21 +27,20 @@ def stare_initiala():
 def creeaza_matrice(albe: dict, negre: dict):
     matrice = [['0'] * 8 for i in range(8)]
     for cheia in albe.keys():
-        linie = albe[cheia]['linie'] - 1
+        linie = albe[cheia]['linie']
         coloana = ord(albe[cheia]['coloana']) - 65
         matrice[linie][coloana] = 'A'
-        linie = negre[cheia]['linie'] - 1
+        linie = negre[cheia]['linie']
         coloana = ord(negre[cheia]['coloana']) - 65
         matrice[linie][coloana] = 'N'
 
     return matrice
 
 
-def stare_finala(configuratie: dict):
-    for pion in configuratie.keys():
-        if pion['linie'] % 7 == 0:
+def stare_finala(matrice: list):
+    for i in range(0, 8):
+        if matrice[0][i] != '0' or matrice[7][i] != '0':
             return True
-
     return False
 
 

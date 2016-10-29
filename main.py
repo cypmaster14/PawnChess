@@ -1,5 +1,6 @@
 import json
 from stari import *
+from joc import *
 
 nume_fisier = 'configuratie.json'
 configuratie = dict()

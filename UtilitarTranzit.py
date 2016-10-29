@@ -12,7 +12,7 @@ def este_pe_tabla(linie: int, coloana: int):
 
 
 def mutare_valida_inainte(tabla: list, ln_act: int, ln_urm: int, col: int, sens: int):
-    return tabla[ln_urm][col] == 0 and tabla[ln_act + sens][col] == 0
+    return tabla[ln_urm][col] == '0' and tabla[ln_act + sens][col] == '0'
 
 
 def mutare_valida_normala_in_diag(tabla: list, ln_urm: int, col_urm: int, sens: int):
@@ -26,10 +26,10 @@ def mutare_en_passant_valida(tabla_prec: list, tabla_act: list, ln_act: int, ln_
     col_prec_piesa_adv = col_urm
     ln_act_piesa_adv = ln_act
     col_act_piesa_adv = col_urm
-    return (tabla_act[ln_urm][col_urm] == 0
+    return (tabla_act[ln_urm][col_urm] == '0'
             and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == culoare_adv
-            and tabla_prec[ln_act_piesa_adv][col_act_piesa_adv] == 0
-            and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == 0
+            and tabla_prec[ln_act_piesa_adv][col_act_piesa_adv] == '0'
+            and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == '0'
             and tabla_act[ln_act_piesa_adv][col_act_piesa_adv] == culoare_adv)
 
 
