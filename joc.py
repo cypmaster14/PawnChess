@@ -85,49 +85,96 @@ def joaca_utilizatorul():
             print(e)
 
 
-def incearca_k_pasi_inainte(ln_act: int, col_act: int, lista_adiacenta: list, strategie, nr_pasi: int):
+def incearca_k_pasi_inainte(ln_act: int, col_act: int, lista_adiacenta: set, strategie, nr_pasi: int):
     ln_urm = ln_act - nr_pasi
     col_urm = col_act
     if este_pe_tabla(ln_urm, col_urm) \
             and mutare_valida_inainte(matrice_configuratie_curenta, ln_act, ln_urm, col_urm, -1) \
             and strategie(ln_urm, col_urm):
-        lista_adiacenta.append((ln_urm, col_urm))
+        lista_adiacenta.add((ln_urm, col_urm))
 
 
-def incearca_deplasare_in_diag(ln_act: int, col_act: int, lista_adiacenta: list, strategie, deplasare):
+def incearca_deplasare_in_diag(ln_act: int, col_act: int, lista_adiacenta: set, strategie, deplasare):
     ln_urm = ln_act - 1
     col_urm = col_act + deplasare
     if este_pe_tabla(ln_urm, col_urm) \
             and mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act, ln_urm,
                                       col_urm, -1) \
             and strategie(ln_urm, col_urm):
-        lista_adiacenta.append((ln_urm, col_urm))
+        lista_adiacenta.add((ln_urm, col_urm))
+
+
+def calculeaza_lista_adiacenta(strategie):
+    dictionar_lista_adiacenta = dict()
+    for piesa in configuratie_curenta['negre'].items():
+        linie, coloana = piesa[1]['linie'], ord(piesa[1]['coloana']) - 65
+        lista_adiacenta = set()
+
+        incearca_k_pasi_inainte(linie, coloana, lista_adiacenta, strategie, 1)
+        if piesa[1]['pas2']:
+            incearca_k_pasi_inainte(linie, coloana, lista_adiacenta, strategie, 2)
+
+        incearca_deplasare_in_diag(linie, coloana, lista_adiacenta, strategie, -1)
+        incearca_deplasare_in_diag(linie, coloana, lista_adiacenta, strategie, +1)
+
+        if len(lista_adiacenta) is not 0:
+            dictionar_lista_adiacenta[piesa[0]] = lista_adiacenta
+    return dictionar_lista_adiacenta
+
+
+def combina_dictionare(dict1: dict, dict2: dict):
+    dict_to_return = dict()
+    for key in dict1.keys():
+        dict_to_return[key] = dict1[key]
+    for key in dict2.keys():
+        if key in dict_to_return.keys():
+            dict_to_return[key] &= dict2[key]
+        else:
+            dict_to_return[key] = dict2[key]
+    return dict_to_return
 
 
 def joaca_calculatorul():
     # Calculatorul va juca mereu cu piesele negre
+    # dam drop la piesa recent mancata
+    piesa_mancata = -1
+    for piesa in configuratie_curenta['negre'].items():
+        if matrice_configuratie_curenta[piesa[1]['linie']][ord(piesa[1]['coloana']) - 65] != 'N':
+            piesa_mancata = piesa[0]
+            break
+    if piesa_mancata is not -1:
+        configuratie_curenta['negre'].pop(piesa_mancata)
+
+    dictionar_strategie_ofensiva = calculeaza_lista_adiacenta(strategie_ofensiva)
+    dictionar_strategie_defensiva = calculeaza_lista_adiacenta(strategie_defensiva)
+    dictionar_combinat = combina_dictionare(dictionar_strategie_defensiva, dictionar_strategie_ofensiva)
 
     dictionar_lista_adiacenta = dict()
-    lista_strategii = {strategie_defensiva, strategie_ofensiva}
+
+    for item in dictionar_combinat.items():
+        item_set = set(filter(lambda tup: culoar_liber_pana_la_capat(matrice_configuratie_curenta, tup[0], tup[1]),
+                              item[1]))
+
+        if len(item_set) > 0:
+            dictionar_lista_adiacenta[item[0]] = item_set
+
+    if len(dictionar_lista_adiacenta) == 0:
+        dictionar_lista_adiacenta = dict(filter(lambda itemy: len(itemy[1]) > 0, dictionar_combinat.items()))
+
+    lista_strategii = [strategie_defensiva, strategie_ofensiva]
+    index = -1
 
     while len(dictionar_lista_adiacenta) == 0 and len(lista_strategii) > 0:
-        strategie = random.choice(list(lista_strategii))
-        print(strategie)
-        lista_strategii.discard(strategie)
-        for piesa in configuratie_curenta['negre'].items():
-            linie, coloana = piesa[1]['linie'], ord(piesa[1]['coloana']) - 65
-            lista_adiacenta = list()
+        print(dictionar_lista_adiacenta)
+        index += 1
+        strategie = lista_strategii[index]
+        #lista_strategii.remove(strategie)
+        if strategie is strategie_defensiva:
+            dictionar_lista_adiacenta = dictionar_strategie_defensiva
+        elif strategie is strategie_ofensiva:
+            dictionar_lista_adiacenta = dictionar_strategie_ofensiva
 
-            incearca_k_pasi_inainte(linie, coloana, lista_adiacenta, strategie, 1)
-            if piesa[1]['pas2']:
-                incearca_k_pasi_inainte(linie, coloana, lista_adiacenta, strategie, 2)
-
-            incearca_deplasare_in_diag(linie, coloana, lista_adiacenta, strategie, -1)
-            incearca_deplasare_in_diag(linie, coloana, lista_adiacenta, strategie, +1)
-
-            if len(lista_adiacenta) is not 0:
-                dictionar_lista_adiacenta[piesa[0]] = lista_adiacenta
-
+    print(dictionar_lista_adiacenta)
     if len(dictionar_lista_adiacenta) == 0:
         sys.exit("Remiza")
 
@@ -157,12 +204,12 @@ def strategie_defensiva(linie: int, coloana: int):
         flag_stanga = True
 
     if este_pe_tabla(stare_jos_linie, stare_dreapta_coloana):
-        if matrice_configuratie_curenta[stare_jos_linie][stare_stanga_coloana] != 'A':
+        if matrice_configuratie_curenta[stare_jos_linie][stare_dreapta_coloana] != 'A':
             flag_drepta = True
     else:
         flag_drepta = True
 
-    return flag_stanga or flag_drepta
+    return flag_stanga and flag_drepta
 
 
 def afiseaza_tabla_joc():

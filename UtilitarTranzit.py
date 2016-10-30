@@ -51,3 +51,10 @@ def mutare_valida_jucator(tabla_prec: list, tabla_act: list, ln_act: int, col_ac
     return este_pe_tabla(ln_urm, col_urm) \
            and (mutare_valida_inainte_jucator(tabla_act, ln_act, col_act, ln_urm, col_urm, sens)
                 or mutare_valida_in_diag_jucator(tabla_prec, tabla_act, ln_act, col_act, ln_urm, col_urm, sens))
+
+
+def culoar_liber_pana_la_capat(tabla: list, ln_act: int, col_act: int):
+    for i in range(ln_act, -1, -1):
+        if tabla[i][col_act] != '0':
+            return False
+    return True
