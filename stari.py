@@ -3,6 +3,10 @@ import random
 
 
 def stare_initiala():
+    """
+        Functia ce returneza stara initiala a unui joc
+    :return: Starea initiala
+    """
     albe = dict()
     negre = dict()
     coloana = 65
@@ -25,6 +29,12 @@ def stare_initiala():
 
 
 def creeaza_matrice(albe: dict, negre: dict):
+    """
+        Creeaza matricea corespunzatoare configuratiei pieselor de pe tabla
+    :param albe:
+    :param negre:
+    :return:
+    """
     matrice = [['0'] * 8 for i in range(8)]
     for cheia in albe.keys():
         linie = albe[cheia]['linie']
@@ -38,6 +48,11 @@ def creeaza_matrice(albe: dict, negre: dict):
 
 
 def stare_finala(matrice: list):
+    """
+        Verifica daca starea actuala a jocului este una finala
+    :param matrice: Starea actuala a jocului , sub forma unei matricei
+    :return:
+    """
     for i in range(0, 8):
         if matrice[0][i] != '0' or matrice[7][i] != '0':
             return True
@@ -45,11 +60,22 @@ def stare_finala(matrice: list):
 
 
 def salvaza_stare(configuratie: dict, nume_fisier: str):
+    """
+        Functie ce salveaza starea curenta a jocului pe disk
+    :param configuratie:
+    :param nume_fisier:
+    :return:
+    """
     with open(nume_fisier, 'w') as fp:
         json.dump(configuratie, fp)
 
 
 def incarca_stare(nume_fisier: str) -> dict:
+    """
+        Functia ce incarca o veche configuratie a jocului
+    :param nume_fisier:
+    :return:
+    """
     with open(nume_fisier, 'r') as fp:
         data = json.load(fp)
     return data

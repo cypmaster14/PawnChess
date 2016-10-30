@@ -8,6 +8,11 @@ matrice_configuratie_anterioara = list()
 
 
 def validare_sintaxa_miscare(miscare: str):
+    """
+        Functie ce valideaza daca miscarea introdusa de utilizator este una valida din punct de vedere sintaxic
+    :param miscare:
+    :return:
+    """
     if len(miscare) == 2 and miscare[0].isalpha() and 'A' <= miscare[0] <= 'H' and miscare[1].isdigit() and 0 <= int(
             miscare[1]) <= 8:
         return True
@@ -16,6 +21,13 @@ def validare_sintaxa_miscare(miscare: str):
 
 
 def mut_piesa_mea(matrice: list, miscare: str, jucator: str):
+    """
+        Functie ce verifica daca piesa pe care doreste sa o multe utilizatorul este o piesa a asa
+    :param matrice: Matricea cureanta
+    :param miscare: Miscarea pe care coreste sa o realizeze jucatorul
+    :param jucator:
+    :return:
+    """
     linie, coloana = get_pozitie(miscare)
     if matrice[linie][coloana] == jucator:
         return True
@@ -23,10 +35,21 @@ def mut_piesa_mea(matrice: list, miscare: str, jucator: str):
 
 
 def get_pozitie(pozitie: str) -> tuple:
+    """
+        Functie ce converteste A5 -> in coordonatele in matrice
+    :param pozitie:
+    :return:
+    """
     return int(pozitie[1]), ord(pozitie[0]) - 65
 
 
 def get_piesa_din_dictionar(piesa: str, culoare_jucator: str) -> int:
+    """
+        Returneaza piesa ce din dictionar ce o afla la o anumita pozitie
+    :param piesa:
+    :param culoare_jucator:
+    :return:
+    """
     linie, coloana = get_pozitie(piesa)
     for piesa in configuratie_curenta[culoare_jucator].keys():
         if configuratie_curenta[culoare_jucator][piesa]['linie'] == linie and \
@@ -35,6 +58,12 @@ def get_piesa_din_dictionar(piesa: str, culoare_jucator: str) -> int:
 
 
 def miscare_valida(pion: str, miscare: str):
+    """
+        Validez miscarea ce se doreste sa se realizeze
+    :param pion:
+    :param miscare:
+    :return:
+    """
     global matrice_configuratie_anterioara, matrice_configuratie_curenta, configuratie_curenta
     ln_urm, col_urm = get_pozitie(miscare)
     ln_act, col_act = get_pozitie(pion)
@@ -48,6 +77,14 @@ def miscare_valida(pion: str, miscare: str):
 
 
 def realizare_tranzitie(piesa_mutata: str, noua_pozitie: str, jucator: str, culoare_jucator: str):
+    """
+        Functie ce realizeaza operatiile necesare realizarii unei tranzitii
+    :param piesa_mutata:
+    :param noua_pozitie:
+    :param jucator:
+    :param culoare_jucator:
+    :return:
+    """
     global matrice_configuratie_anterioara, matrice_configuratie_curenta, configuratie_curenta
     linie_noua, coloana_noua = get_pozitie(noua_pozitie)
     linie_veche, coloana_veche = get_pozitie(piesa_mutata)
@@ -61,6 +98,10 @@ def realizare_tranzitie(piesa_mutata: str, noua_pozitie: str, jucator: str, culo
 
 
 def joaca_utilizatorul():
+    """
+        Functie ce reprezenta actiunea realizata de utilizator
+    :return:
+    """
     while True:
         try:
             piesa_mutata = input('Introduce-ti piesa pe care doriti sa o mutati(Ex:a2):')
@@ -86,6 +127,15 @@ def joaca_utilizatorul():
 
 
 def incearca_k_pasi_inainte(ln_act: int, col_act: int, lista_adiacenta: set, strategie, nr_pasi: int):
+    """
+        Functie ce determina posibilele miscari cu k pasi inainte
+    :param ln_act:
+    :param col_act:
+    :param lista_adiacenta:
+    :param strategie:
+    :param nr_pasi:
+    :return:
+    """
     ln_urm = ln_act - nr_pasi
     col_urm = col_act
     if este_pe_tabla(ln_urm, col_urm) \
@@ -95,6 +145,15 @@ def incearca_k_pasi_inainte(ln_act: int, col_act: int, lista_adiacenta: set, str
 
 
 def incearca_deplasare_in_diag(ln_act: int, col_act: int, lista_adiacenta: set, strategie, deplasare):
+    """
+        Functie ce determina posibilele miscare in diagonala
+    :param ln_act:
+    :param col_act:
+    :param lista_adiacenta:
+    :param strategie:
+    :param deplasare:
+    :return:
+    """
     ln_urm = ln_act - 1
     col_urm = col_act + deplasare
     if este_pe_tabla(ln_urm, col_urm) \
@@ -105,6 +164,11 @@ def incearca_deplasare_in_diag(ln_act: int, col_act: int, lista_adiacenta: set, 
 
 
 def calculeaza_lista_adiacenta(strategie):
+    """
+        Functie ce determina lista de adicaenta a fiecarui pion , un functie de strategie primita ca parematru
+    :param strategie: Strategia in functie de care trebuie sa determinam listele de adiacenta
+    :return:
+    """
     dictionar_lista_adiacenta = dict()
     for piesa in configuratie_curenta['negre'].items():
         linie, coloana = piesa[1]['linie'], ord(piesa[1]['coloana']) - 65
@@ -135,6 +199,10 @@ def combina_dictionare(dict1: dict, dict2: dict):
 
 
 def joaca_calculatorul():
+    """
+        Functie ce reprezenta actiunea realizata de calculator
+    :return:
+    """
     # Calculatorul va juca mereu cu piesele negre
     # dam drop la piesa recent mancata
     piesa_mancata = -1
@@ -186,10 +254,22 @@ def joaca_calculatorul():
 
 
 def strategie_ofensiva(ln_urm: int, col_urm: int):
+    """
+        Functie ce va verifica daca o posibila miscare este una ofensiva
+    :param ln_urm: O posibila linie pe care pot sa ma duc
+    :param col_urm:  O posibili coloana pe care pot sa ma duc
+    :return:
+    """
     return matrice_configuratie_curenta[ln_urm][col_urm] == 'A'
 
 
 def strategie_defensiva(linie: int, coloana: int):
+    """
+        Functie ce va verifica daca o posibile miscare este una defensiva
+    :param linie: O posibila linie pe care pot sa ma duc
+    :param coloana: O posibila coloana pe care pot sa ma duc
+    :return:
+    """
     stare_stanga_coloana = coloana - 1
     stare_jos_linie = linie - 1
     stare_dreapta_coloana = coloana + 1
@@ -213,6 +293,10 @@ def strategie_defensiva(linie: int, coloana: int):
 
 
 def afiseaza_tabla_joc():
+    """
+        Metoda ce va afisa in consola tabla de has
+    :return:
+    """
     global matrice_configuratie_curenta
     for i in range(7, -1, -1):
         linie_tabla = str(i)
@@ -223,6 +307,12 @@ def afiseaza_tabla_joc():
 
 
 def joaca(configuratie: dict, matrice: list):
+    """
+        Functie ce consta in desfasurarea jocului de sah
+    :param configuratie:
+    :param matrice:
+    :return:
+    """
     global configuratie_curenta, matrice_configuratie_anterioara, matrice_configuratie_curenta
     configuratie_curenta = configuratie
     matrice_configuratie_anterioara = list(matrice)
