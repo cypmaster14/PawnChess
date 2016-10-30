@@ -168,7 +168,7 @@ def joaca_calculatorul():
         print(dictionar_lista_adiacenta)
         index += 1
         strategie = lista_strategii[index]
-        #lista_strategii.remove(strategie)
+        # lista_strategii.remove(strategie)
         if strategie is strategie_defensiva:
             dictionar_lista_adiacenta = dictionar_strategie_defensiva
         elif strategie is strategie_ofensiva:
@@ -215,9 +215,11 @@ def strategie_defensiva(linie: int, coloana: int):
 def afiseaza_tabla_joc():
     global matrice_configuratie_curenta
     for i in range(7, -1, -1):
-        print(i, matrice_configuratie_curenta[i])
-    print()
-    print(" ", ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+        linie_tabla = str(i)
+        for j in range(0, 8):
+            linie_tabla = linie_tabla + " " +matrice_configuratie_curenta[i][j]
+        print(linie_tabla)
+    print(" ", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
 
 
 def joaca(configuratie: dict, matrice: list):

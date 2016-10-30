@@ -42,7 +42,7 @@ def mutare_valida_in_diag_jucator(tabla_prec: list, tabla_act: list, ln_act: int
 
 
 def mutare_valida_inainte_jucator(tabla: list, ln_act: int, col_act: int, ln_urm: int, col_urm, sens: int):
-    return col_act == col_urm and 0 < abs(ln_urm - ln_act) * sens < 3 \
+    return col_act == col_urm and 0 < (ln_urm - ln_act) * sens < 3 \
            and mutare_valida_inainte(tabla, ln_act, ln_urm, col_act, sens)
 
 
