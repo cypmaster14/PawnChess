@@ -1,8 +1,11 @@
+
+
 def sterge_din_configuratie_piesele_mancate(tabla: list,
-                                            configuratie_jucator: dict):
+                                            configuratie_jucator: dict,
+                                            culoare: str):
     piesa_mancata = -1
     for piesa in configuratie_jucator.items():
-        if tabla[piesa[1]['linie']][ord(piesa[1]['coloana']) - 65] != 'N':
+        if tabla[piesa[1]['linie']][ord(piesa[1]['coloana']) - 65] != culoare:
             piesa_mancata = piesa[0]
             break
     if piesa_mancata is not -1:

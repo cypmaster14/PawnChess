@@ -130,7 +130,9 @@ def este_pozitie_en_passant(tabla_prec: list, tabla_act: list, ln_act: int,
     col_prec_pion_adv = col_act
     ln_act_pion_adv = ln_act - sens
     col_act_pion_adv = col_act
-    return pion_mutat_cu_2_poz(tabla_prec, tabla_act, ln_prec_pion_adv,
+    return este_pe_tabla(ln_prec_pion_adv, col_prec_pion_adv) and \
+           este_pe_tabla(ln_act_pion_adv, col_act_pion_adv) and \
+           pion_mutat_cu_2_poz(tabla_prec, tabla_act, ln_prec_pion_adv,
                                col_prec_pion_adv, ln_act_pion_adv,
                                col_act_pion_adv, culoare_adv)
 

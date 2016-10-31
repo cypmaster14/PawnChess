@@ -97,6 +97,14 @@ def joaca_utilizatorul():
         Functie ce reprezenta actiunea realizata de utilizator
     :return:
     """
+    configuratie_jucator = configuratie_curenta['albe']
+    sterge_din_configuratie_piesele_mancate(matrice_configuratie_curenta,
+                                            configuratie_jucator, 'A')
+    dictionar_posibilitati_mutare = calculeaza_liste_adiacenta(
+        matrice_configuratie_anterioara,
+        matrice_configuratie_curenta, configuratie_jucator)
+    if len(dictionar_posibilitati_mutare) == 0:
+        sys.exit("Remiza")
     while True:
         try:
             piesa_mutata = input(
@@ -132,7 +140,7 @@ def joaca_calculatorul():
     """
     # Calculatorul va juca mereu cu piesele negre
     sterge_din_configuratie_piesele_mancate(matrice_configuratie_curenta,
-                                            configuratie_curenta['negre'])
+                                            configuratie_curenta['negre'], 'N')
 
     liste_adiacenta = calculeaza_liste_adiacenta(
         matrice_configuratie_anterioara, matrice_configuratie_curenta,
@@ -162,8 +170,8 @@ def joaca_calculatorul():
     dictionar_posibilitati_nume = ["en_passant", "culoar", "ofensiva sigura",
                                    "defensiva", "ofensiva", "all"]
 
-    for i in range(len(lista_liste_adiacenta)):
-        print(dictionar_posibilitati_nume[i], lista_liste_adiacenta[i])
+    # for i in range(len(lista_liste_adiacenta)):
+    #     print(dictionar_posibilitati_nume[i], lista_liste_adiacenta[i])
 
     dictionar_posibilitati_mutare = lista_liste_adiacenta.pop(0)
     nume_lista = dictionar_posibilitati_nume.pop(0)
@@ -173,8 +181,8 @@ def joaca_calculatorul():
         dictionar_posibilitati_mutare = lista_liste_adiacenta.pop(0)
         nume_lista = dictionar_posibilitati_nume.pop(0)
 
-    print("Calculatorul a ales", nume_lista, "si poate alege din:")
-    print(dictionar_posibilitati_mutare)
+    # print("Calculatorul a ales", nume_lista, "si poate alege din:")
+    # print(dictionar_posibilitati_mutare)
 
     if len(dictionar_posibilitati_mutare) == 0:
         sys.exit("Remiza")

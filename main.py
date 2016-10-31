@@ -1,6 +1,6 @@
 from joc import *
 
-nume_fisier = 'configuratie.json'
+nume_fisier = 'config_init.json'
 configuratie = dict()
 configuratie['albe'], configuratie['negre'], matrice = incarca_stare(nume_fisier)
 print(configuratie)
