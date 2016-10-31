@@ -40,7 +40,7 @@ def este_pozitie_defensiva(tabla_act: list, linie: int,
         posib_tabla_viit = [list(x) for x in tabla_act]
         posib_tabla_viit[ln_prec_pion][col_prec_pion] = '0'
         posib_tabla_viit[linie][coloana] = 'N'
-        if mutare_en_passant_valida(tabla_act, posib_tabla_viit, ln_prec_pion,
+        if mutare_valida_en_passant(tabla_act, posib_tabla_viit, ln_prec_pion,
                                     linie, coloana, -1):
             return pozitii_laterale_sigure(tabla_act, linie, coloana)
         else:
