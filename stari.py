@@ -1,6 +1,4 @@
 import json
-import random
-
 
 def stare_initiala():
     """

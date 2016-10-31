@@ -37,7 +37,7 @@ def get_piesa_din_dictionar(piesa: str, configuratie_jucator: dict) -> int:
     """
         Returneaza piesa din dictionar ce se afla la o anumita pozitie
     :param piesa:
-    :param culoare_jucator:
+    :param configuratie_jucator:
     :return:
     """
     linie, coloana = get_pozitie(piesa)
