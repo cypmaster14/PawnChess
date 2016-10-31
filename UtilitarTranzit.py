@@ -82,7 +82,7 @@ def mutare_en_passant_valida(tabla_prec: list, tabla_act: list, ln_act: int,
 
 
 def mutare_valida_in_diag(tabla_prec: list, tabla_act: list, ln_act: int,
-                          ln_urm: int, col_urm: int, sens: int):
+                          ln_urm: int, col_urm: int, sens: int) -> bool:
     """
         Functia ce valideaza daca o miscare in diagonala este valida
     :param tabla_prec: Matrice anterioara ( Configuratia matricei , inainte sa fac miscarea pe care o doresc sa o fac)
@@ -134,8 +134,8 @@ def mutare_valida_inainte_jucator(tabla: list, ln_act: int, col_act: int,
 
 
 def mutare_valida_jucator(tabla_prec: list, tabla_act: list, ln_act: int,
-                          col_act: int, ln_urm: int, col_urm: int, sens: int)\
-        -> bool:
+                          col_act: int, ln_urm: int, col_urm: int,
+                          sens: int) -> bool:
     """
         Functie ce valideaza daca miscarea pe care utilizatorul doreste sa o realizeze este valida
     :param tabla_prec: Matricea precedenta
