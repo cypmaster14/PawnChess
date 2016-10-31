@@ -1,29 +1,30 @@
 import json
 
-def stare_initiala():
-    """
-        Functia ce returneza stara initiala a unui joc
-    :return: Starea initiala
-    """
-    albe = dict()
-    negre = dict()
-    coloana = 65
-    for i in range(1, 9):
-        albe[i] = {
-            'linie': 1,
-            'coloana': chr(coloana + i - 1),
-            'pas2': True,
-            'sens': 1
-        }
 
-        negre[i] = {
-            'linie': 6,
-            'coloana': chr(coloana + i - 1),
-            'pas2': True,
-            'sens': -1
-        }
-
-    return (albe, negre, creeaza_matrice(albe, negre))
+# def stare_initiala():
+#     """
+#         Functia ce returneza stara initiala a unui joc
+#     :return: Starea initiala
+#     """
+#     albe = dict()
+#     negre = dict()
+#     coloana = 65
+#     for i in range(1, 9):
+#         albe[i] = {
+#             'linie': 1,
+#             'coloana': chr(coloana + i - 1),
+#             'pas2': True,
+#             'sens': 1
+#         }
+#
+#         negre[i] = {
+#             'linie': 6,
+#             'coloana': chr(coloana + i - 1),
+#             'pas2': True,
+#             'sens': -1
+#         }
+#
+#     return (albe, negre, creeaza_matrice(albe, negre))
 
 
 def creeaza_matrice(albe: dict, negre: dict):
@@ -76,4 +77,7 @@ def incarca_stare(nume_fisier: str) -> dict:
     """
     with open(nume_fisier, 'r') as fp:
         data = json.load(fp)
-    return data
+
+    piese_albe = data['albe']
+    piese_negre = data['negre']
+    return piese_albe, piese_negre, creeaza_matrice(piese_albe, piese_negre)

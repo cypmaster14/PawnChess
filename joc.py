@@ -75,15 +75,16 @@ def realizare_tranzitie(piesa_mutata: str, noua_pozitie: str,
     linie_noua, coloana_noua = get_pozitie(noua_pozitie)
     linie_veche, coloana_veche = get_pozitie(piesa_mutata)
     culoare = obtine_culoare_dupa_sens(sens)
-    matrice_configuratie_curenta[linie_veche][coloana_veche] = '0'
-    matrice_configuratie_curenta[linie_noua][coloana_noua] = culoare
-    if este_pozitie_en_passant(matrice_configuratie_anterioara,
-                               matrice_configuratie_curenta, linie_noua,
-                               coloana_noua, sens):
-        matrice_configuratie_curenta[linie_noua - sens][coloana_noua] = '0'
-
+    matrice_anterioara_celei_anterioare = matrice_configuratie_anterioara
     matrice_configuratie_anterioara = [list(x) for x in
                                        matrice_configuratie_curenta]
+    matrice_configuratie_curenta[linie_veche][coloana_veche] = '0'
+    matrice_configuratie_curenta[linie_noua][coloana_noua] = culoare
+
+    if este_pozitie_en_passant(matrice_anterioara_celei_anterioare,
+                               matrice_configuratie_anterioara, linie_noua,
+                               coloana_noua, sens):
+        matrice_configuratie_curenta[linie_noua - sens][coloana_noua] = '0'
 
     pion = get_piesa_din_dictionar(piesa_mutata, configuratie_jucator)
     configuratie_jucator[pion]['pas2'] = False

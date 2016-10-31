@@ -7,8 +7,8 @@
     },
     "2": {
       "coloana": "B",
-      "linie": 3,
-      "pas2": false
+      "linie": 6,
+      "pas2": true
     },
     "3": {
       "coloana": "C",
@@ -32,7 +32,7 @@
     },
     "7": {
       "coloana": "G",
-      "linie": 6,
+      "linie": 7,
       "pas2": true
     },
     "8": {
@@ -49,8 +49,8 @@
     },
     "2": {
       "coloana": "B",
-      "linie": 2,
-      "pas2": false
+      "linie": 6,
+      "pas2": true
     },
     "3": {
       "coloana": "C",
