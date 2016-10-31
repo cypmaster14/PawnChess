@@ -46,7 +46,7 @@ def mutare_valida_normala_in_diag(tabla: list, ln_urm: int, col_urm: int, sens: 
     return tabla[ln_urm][col_urm] == culoare_adv
 
 
-def mutare_en_passant_valida(tabla_prec: list, tabla_act: list, ln_act: int, ln_urm: int, col_urm: int, sens: int):
+def mutare_valida_en_passant(tabla_prec: list, tabla_act: list, ln_act: int, ln_urm: int, col_urm: int, sens: int):
     """
         Functia ce valideaza o miscare en_passant
     :param tabla_prec: Matrice anterioara ( Configuratia matricei , inainte sa fac miscarea pe care o doresc sa o fac)
@@ -65,7 +65,7 @@ def mutare_en_passant_valida(tabla_prec: list, tabla_act: list, ln_act: int, ln_
     return (tabla_act[ln_urm][col_urm] == '0'
             and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == culoare_adv
             and tabla_prec[ln_act_piesa_adv][col_act_piesa_adv] == '0'
-            and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == '0'
+            # and tabla_prec[ln_prec_piesa_adv][col_prec_piesa_adv] == '0'
             and tabla_act[ln_act_piesa_adv][col_act_piesa_adv] == culoare_adv)
 
 
@@ -80,8 +80,9 @@ def mutare_valida_in_diag(tabla_prec: list, tabla_act: list, ln_act: int, ln_urm
     :param sens: Sensul in care trebuie sa se mute pionul
     :return:
     """
-    return mutare_valida_normala_in_diag(tabla_act, ln_urm, col_urm, sens) \
-           or mutare_en_passant_valida(tabla_prec, tabla_act, ln_act, ln_urm, col_urm, sens)
+    # return mutare_valida_normala_in_diag(tabla_act, ln_urm, col_urm, sens) \
+    #        or mutare_valida_en_passant(tabla_prec, tabla_act, ln_act, ln_urm, col_urm, sens)
+    return mutare_valida_normala_in_diag(tabla_act, ln_urm, col_urm, sens)
 
 
 def mutare_valida_in_diag_jucator(tabla_prec: list, tabla_act: list, ln_act: int, col_act: int, ln_urm: int,

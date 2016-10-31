@@ -5,6 +5,7 @@ import sys
 configuratie_curenta = dict()
 matrice_configuratie_curenta = list()
 matrice_configuratie_anterioara = list()
+miscare_en_passant = (0, 0)
 
 
 def validare_sintaxa_miscare(miscare: str):
@@ -72,6 +73,16 @@ def miscare_valida(pion: str, miscare: str):
     if abs(ln_urm - ln_act) == 2 and col_act == col_urm and configuratie_curenta['albe'][pozitie]['pas2'] == False:
         return False
 
+    mutarea_este_valida = mutare_valida_jucator(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act,
+                                                col_act, ln_urm,
+                                                col_urm, 1)
+
+    if mutarea_este_valida:
+        if mutare_valida_en_passant(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act, ln_urm,
+                                    col_urm, 1):
+            global miscare_en_passant
+            miscare_en_passant = (ln_urm, col_urm)
+
     return mutare_valida_jucator(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act, col_act, ln_urm,
                                  col_urm, 1)
 
@@ -85,7 +96,7 @@ def realizare_tranzitie(piesa_mutata: str, noua_pozitie: str, jucator: str, culo
     :param culoare_jucator:
     :return:
     """
-    global matrice_configuratie_anterioara, matrice_configuratie_curenta, configuratie_curenta
+    global matrice_configuratie_anterioara, matrice_configuratie_curenta, configuratie_curenta, miscare_en_passant
     linie_noua, coloana_noua = get_pozitie(noua_pozitie)
     linie_veche, coloana_veche = get_pozitie(piesa_mutata)
     matrice_configuratie_anterioara = [list(x) for x in matrice_configuratie_curenta]
@@ -95,6 +106,18 @@ def realizare_tranzitie(piesa_mutata: str, noua_pozitie: str, jucator: str, culo
     configuratie_curenta[culoare_jucator][pion]['pas2'] = False
     configuratie_curenta[culoare_jucator][pion]['linie'], configuratie_curenta[culoare_jucator][pion][
         'coloana'] = linie_noua, chr(coloana_noua + 65)
+
+    if miscare_en_passant[0] == linie_noua and miscare_en_passant[1] == coloana_noua:
+        # Am ales sa fac miscarea en-passant
+        # Trebuie sa mananc piesa
+        # Determin ce jucator a realizat en_passant
+        if jucator == 'A':
+            matrice_configuratie_curenta[linie_noua - 1][coloana_noua] = '0'
+        else:
+            matrice_configuratie_curenta[linie_noua + 1][coloana_noua] = '0'
+
+    # Resetez valoare miscarii empasant
+    miscare_en_passant = (0, 0)
 
 
 def joaca_utilizatorul():
@@ -160,6 +183,14 @@ def incearca_deplasare_in_diag(ln_act: int, col_act: int, lista_adiacenta: set, 
             and mutare_valida_in_diag(matrice_configuratie_anterioara, matrice_configuratie_curenta, ln_act, ln_urm,
                                       col_urm, -1) \
             and strategie(ln_urm, col_urm):
+        lista_adiacenta.add((ln_urm, col_urm))
+
+    if este_pe_tabla(ln_urm, col_urm) and \
+            mutare_valida_en_passant(matrice_configuratie_anterioara,
+                                     matrice_configuratie_curenta, ln_act, ln_urm, col_urm,
+                                     -1):
+        global miscare_en_passant
+        miscare_en_passant = (ln_urm, col_urm)
         lista_adiacenta.add((ln_urm, col_urm))
 
 
@@ -301,14 +332,14 @@ def afiseaza_tabla_joc():
     for i in range(7, -1, -1):
         linie_tabla = str(i)
         for j in range(0, 8):
-            linie_tabla = linie_tabla + " " +matrice_configuratie_curenta[i][j]
+            linie_tabla = linie_tabla + " " + matrice_configuratie_curenta[i][j]
         print(linie_tabla)
     print(" ", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
 
 
 def joaca(configuratie: dict, matrice: list):
     """
-        Functie ce consta in desfasurarea jocului de sah
+          Functie ce consta in desfasurarea jocului de sah
     :param configuratie:
     :param matrice:
     :return:

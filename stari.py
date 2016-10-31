@@ -78,4 +78,8 @@ def incarca_stare(nume_fisier: str) -> dict:
     """
     with open(nume_fisier, 'r') as fp:
         data = json.load(fp)
-    return data
+
+    piese_albe = data['albe']
+    piese_negre = data['negre']
+
+    return piese_albe, piese_negre, creeaza_matrice(piese_albe, piese_negre)
