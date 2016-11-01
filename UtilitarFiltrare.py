@@ -147,7 +147,12 @@ def obtine_liste_adiacenta_en_passant(tabla_prec: list, tabla_act: list,
                            liste_adiacenta_ofensive.items())))
 
 
-def obtine_liste_adiacenta_pericol(lista_defensive: dict,
-                                   list_ofensive_nesigure: dict):
-    return dict(filter(lambda item: item[0] in list_ofensive_nesigure.keys(),
-                       lista_defensive.items()))
+def obtine_liste_adiacenta_ofensive_nesigure(lista_ofensive: dict,
+                                             lista_ofensive_sigure: dict):
+    set_vid = set()  # multimea vida
+    return dict(filter(lambda good_item: len(good_item[1]) > 0,
+                       map(lambda item: [item[0],
+                                         item[1] -
+                                         lista_ofensive_sigure.get(item[0],
+                                                                   set_vid)],
+                           lista_ofensive.items())))

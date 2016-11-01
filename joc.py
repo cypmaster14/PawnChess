@@ -161,17 +161,19 @@ def joaca_calculatorul():
         matrice_configuratie_anterioara,
         matrice_configuratie_curenta,
         liste_adiacenta_ofensive_sigure)  # sa facem en-passant din ofensive simplu, sau din alea sigure?
+    liste_adiacenta_ofensive_nesigure = obtine_liste_adiacenta_ofensive_nesigure(
+        liste_adiacenta_ofensive, liste_adiacenta_ofensive_sigure)
     lista_liste_adiacenta = [liste_adiacenta_en_passant,
                              liste_adiacenta_culoar,
                              liste_adiacenta_ofensive_sigure,
+                             liste_adiacenta_ofensive_nesigure,
                              liste_adiacenta_defensive,
-                             liste_adiacenta_ofensive,
                              liste_adiacenta]
     dictionar_posibilitati_nume = ["en_passant", "culoar", "ofensiva sigura",
-                                   "defensiva", "ofensiva", "all"]
+                                   "ofensiva nesigura", "defensiva", "all"]
 
-    # for i in range(len(lista_liste_adiacenta)):
-    #     print(dictionar_posibilitati_nume[i], lista_liste_adiacenta[i])
+    for i in range(len(lista_liste_adiacenta)):
+        print(dictionar_posibilitati_nume[i], lista_liste_adiacenta[i])
 
     dictionar_posibilitati_mutare = lista_liste_adiacenta.pop(0)
     nume_lista = dictionar_posibilitati_nume.pop(0)
@@ -181,8 +183,7 @@ def joaca_calculatorul():
         dictionar_posibilitati_mutare = lista_liste_adiacenta.pop(0)
         nume_lista = dictionar_posibilitati_nume.pop(0)
 
-    # print("Calculatorul a ales", nume_lista, "si poate alege din:")
-    # print(dictionar_posibilitati_mutare)
+    print("Calculatorul a ales", nume_lista)
 
     if len(dictionar_posibilitati_mutare) == 0:
         sys.exit("Remiza")

@@ -39,6 +39,8 @@ def creeaza_matrice(albe: dict, negre: dict):
         linie = albe[cheia]['linie']
         coloana = ord(albe[cheia]['coloana']) - 65
         matrice[linie][coloana] = 'A'
+
+    for cheia in negre.keys():
         linie = negre[cheia]['linie']
         coloana = ord(negre[cheia]['coloana']) - 65
         matrice[linie][coloana] = 'N'
